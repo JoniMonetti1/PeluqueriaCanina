@@ -1,5 +1,6 @@
 package org.example.persistence;
 
+import java.util.List;
 import org.example.logic.Duenio;
 import org.example.logic.Mascota;
 
@@ -14,6 +15,15 @@ public class ControladoraPersistence {
         
         //creamos en la BBDD la mascota
         mascotaJpaController.create(mascota);
+    }
+
+    public List<Mascota> traerMascotas() {
+        
+        return mascotaJpaController.findMascotaEntities();
+    }
+
+    public void borrarMascota(int numCliente) {
+        mascotaJpaController.eliminarMascotaPorId(numCliente);
     }
     
 }

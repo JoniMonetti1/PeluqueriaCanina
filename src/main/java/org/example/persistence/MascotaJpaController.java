@@ -5,10 +5,13 @@
 package org.example.persistence;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import org.example.logic.Mascota;
 
 /**
@@ -74,13 +77,39 @@ public class MascotaJpaController implements Serializable {
             }
         }
     }
+    
+    public void eliminarMascotaPorId(int id) {
+        EntityTransaction transaction = null;
+        EntityManager em = emf.createEntityManager();
+        try{
+            transaction = em.getTransaction();
+            transaction.begin();
+            
+            Mascota mascota = em.find(Mascota.class, id);
+            if(mascota != null) {
+                em.remove(mascota);
+            } else System.out.println("No se encontro la mascota con el id proporcionado");
+            transaction.commit();
+        }catch(Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            System.out.println("Error al eliminar la mascota: " + e.getMessage());
+        }   
+    }
 
-    public Mascota findAlumno(int id) {
+    public Mascota findMascota(int id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Mascota.class, id);
         } finally {
             em.close();
         }
+    }
+    
+    public List<Mascota> findMascotaEntities() {
+        EntityManager em = getEntityManager();
+        TypedQuery<Mascota> query = em.createQuery("SELECT mascota FROM Mascota mascota", Mascota.class);
+        return query.getResultList();
     }
 }

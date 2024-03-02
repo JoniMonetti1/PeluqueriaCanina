@@ -1,5 +1,6 @@
 package org.example.logic;
 
+import java.util.List;
 import org.example.persistence.ControladoraPersistence;
 
 public class Controladora {
@@ -26,5 +27,13 @@ public class Controladora {
         //Usamos la controladora de la persistencia para guardar los datos en Base de datos
         controladoraPersistence.guardar(duenio1, mascota);
         
+    }
+
+    public List<Mascota> traerMascotas() {
+        return controladoraPersistence.traerMascotas();
+    }
+
+    public void borrarMascota(int numCliente) {
+        controladoraPersistence.borrarMascota(numCliente);
     }
 }
