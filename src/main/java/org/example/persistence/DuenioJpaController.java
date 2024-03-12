@@ -67,7 +67,7 @@ public class DuenioJpaController implements Serializable {
         }
     }
 
-    public Duenio findAlumno(int id) {
+    public Duenio findDuenio(int id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Duenio.class, id);

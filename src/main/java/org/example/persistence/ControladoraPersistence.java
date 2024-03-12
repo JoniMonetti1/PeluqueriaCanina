@@ -25,5 +25,21 @@ public class ControladoraPersistence {
     public void borrarMascota(int numCliente) {
         mascotaJpaController.eliminarMascotaPorId(numCliente);
     }
+
+    public Mascota traerMascota(int numCliente) {
+        return mascotaJpaController.findMascota(numCliente);
+    }
+
+    public void modificarMascota(Mascota mascota) {
+        mascotaJpaController.edit(mascota);
+    }
+
+    public Duenio traerDuenio(int idDuenio) {
+        return duenioJpaController.findDuenio(idDuenio);
+    }
+
+    public void modificarDuenio(Duenio dueno) {
+        duenioJpaController.edit(dueno);
+    }
     
 }

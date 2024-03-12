@@ -36,4 +36,36 @@ public class Controladora {
     public void borrarMascota(int numCliente) {
         controladoraPersistence.borrarMascota(numCliente);
     }
+
+    public Mascota traerMascota(int numCliente) {
+        return controladoraPersistence.traerMascota(numCliente);
+    }
+
+    public void modificarMascota(Mascota mascota, String nombreMascota, String raza, String color, String observaciones, String alergico, String atencionEsp, String duenio, String celDuenio) {
+        mascota.setNombre(nombreMascota);
+        mascota.setRaza(raza);
+        mascota.setColor(color);
+        mascota.setObservaciones(observaciones);
+        mascota.setAtencionEspecial(atencionEsp);
+        mascota.setAlergico(alergico);
+        
+        //modificar mascota
+        controladoraPersistence.modificarMascota(mascota);
+        
+        //seteo nuevos valores del dueño
+        Duenio dueno = this.buscarDuenio(mascota.getDuenio().getIdDuenio());
+        dueno.setCelDuenio(celDuenio);
+        dueno.setNombre(duenio);
+        
+        //llamar al modificar dueño
+        this.modificarDuenio(dueno);
+    }
+
+    private Duenio buscarDuenio(int idDuenio) {
+        return controladoraPersistence.traerDuenio(idDuenio);
+    }
+
+    private void modificarDuenio(Duenio dueno) {
+        controladoraPersistence.modificarDuenio(dueno);
+    }
 }

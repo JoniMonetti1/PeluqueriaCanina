@@ -1,18 +1,21 @@
 package org.example.IGU;
 
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import org.example.logic.Controladora;
+import org.example.logic.Mascota;
 
-public class CargaDatos extends javax.swing.JFrame {
+public class ModificarDatos extends javax.swing.JFrame {
 
     
-    private Controladora controladora = new Controladora();
+    private Controladora controladora = null;
+    private int numCliente;
+    private Mascota mascota = null;
+    private VerDatos verDatos = null; 
     
-    
-    public CargaDatos() {
-        //controladora = new Controladora();
+    public ModificarDatos(int numCliente) {
+        controladora = new Controladora();
         initComponents();
+        cargarDatos(numCliente);
+        verDatos = new VerDatos();
     }
 
     @SuppressWarnings("unchecked")
@@ -46,7 +49,7 @@ public class CargaDatos extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
-        jLabel1.setText("Carga de Datos");
+        jLabel1.setText("Modificacion de Datos");
 
         jLabel3.setText("Nombre:");
 
@@ -150,12 +153,10 @@ public class CargaDatos extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\jonipcw\\Downloads\\imagen perro resized.jpg")); // NOI18N
         jLabel2.setText("jLabel2");
 
         btnGuardar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnGuardar.setIcon(new javax.swing.ImageIcon("C:\\Users\\jonipcw\\Downloads\\icons8-guardar-50.png")); // NOI18N
-        btnGuardar.setText("Guardar");
+        btnGuardar.setText("Guardar Cambios");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
@@ -163,7 +164,6 @@ public class CargaDatos extends javax.swing.JFrame {
         });
 
         btnLimpiar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnLimpiar.setIcon(new javax.swing.ImageIcon("C:\\Users\\jonipcw\\Downloads\\icons8-escoba-50.png")); // NOI18N
         btnLimpiar.setText(" Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,14 +186,11 @@ public class CargaDatos extends javax.swing.JFrame {
                         .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(54, 54, 54))))
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(116, 116, 116)
+                .addGap(62, 62, 62)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -239,14 +236,13 @@ public class CargaDatos extends javax.swing.JFrame {
         txtObservaciones.setText("");
         txtDuenio.setText("");
         txtCelDuenio.setText("");
-        txtObservaciones.setText("");
         cmbAlergico.setSelectedIndex(0);
         cmbAtcEsp.setSelectedIndex(0);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         
-        //Datos de la mascota
+       //Datos de la mascota
         String nombreMascota = txtNombre.getText();
         String raza = txtRaza.getText();
         String color = txtColor.getText();
@@ -260,13 +256,18 @@ public class CargaDatos extends javax.swing.JFrame {
         
         
         
-        controladora.guardar(nombreMascota, raza, color, observaciones, duenio, celDuenio, alergico, atencionEsp);
+        controladora.modificarMascota(mascota, nombreMascota, raza, color, observaciones, alergico, atencionEsp, duenio, celDuenio);
         
-        JOptionPane optionPane = new JOptionPane("Se guardo correctamente");
-        optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-        JDialog dialog = optionPane.createDialog("Guardado");
-        dialog.setAlwaysOnTop(true);
-        dialog.setVisible(true);
+        //Mensaje que todo salio bien
+        verDatos.mostrarMensaje("Edicion realizada correctamente", "Info", "Edicion exitosa");
+        
+        //Para que se recargue la tabla de ver datos
+        verDatos.setVisible(true);
+        verDatos.setLocationRelativeTo(null);
+        
+        //Cerrar ventana cuando la edicion se completo
+        this.dispose();
+        
     }//GEN-LAST:event_btnGuardarActionPerformed
 
 
@@ -295,4 +296,26 @@ public class CargaDatos extends javax.swing.JFrame {
     private javax.swing.JTextArea txtObservaciones;
     private javax.swing.JTextField txtRaza;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarDatos(int numCliente) {
+        this.mascota = controladora.traerMascota(numCliente);
+        
+        
+        txtNombre.setText(mascota.getNombre());
+        txtRaza.setText(mascota.getRaza());
+        txtColor.setText(mascota.getColor());
+        txtObservaciones.setText(mascota.getObservaciones());
+        txtDuenio.setText(mascota.getDuenio().getNombre());
+        txtCelDuenio.setText(mascota.getDuenio().getCelDuenio());
+        if(mascota.getAlergico().equals("SI")) {
+            cmbAlergico.setSelectedIndex(1);
+        } else if(mascota.getAlergico().equals("NO")){
+            cmbAlergico.setSelectedIndex(2);
+        }
+        if(mascota.getAtencionEspecial().equals("SI")) {
+            cmbAtcEsp.setSelectedIndex(1);
+        } else if(mascota.getAtencionEspecial().equals("NO")){
+            cmbAtcEsp.setSelectedIndex(2);
+        }
+    }
 }

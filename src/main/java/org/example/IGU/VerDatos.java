@@ -179,7 +179,21 @@ public class VerDatos extends javax.swing.JFrame {
     }
     
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
+        //Controlo que la tabla no este vacia
+        if(tablaMascota.getRowCount() > 0) {
+            //Controlo que el usuario haya seleccionado una mascota
+            if(tablaMascota.getSelectedRow() != -1) {
+                
+                //Obtengo el id de la mascota a editar
+                int numCliente = Integer.parseInt(String.valueOf(tablaMascota.getValueAt(tablaMascota.getSelectedRow(), 0)));
+                ModificarDatos pantallaModificar = new ModificarDatos(numCliente);
+                pantallaModificar.setVisible(true);
+                pantallaModificar.setLocationRelativeTo(null);
+                
+                this.dispose();
+                
+            } else mostrarMensaje("No se ha seleccionado ninguna mascota", "Error", "Estado del proceso");
+        }else mostrarMensaje("No se pueden modificar datos de una tabla vacia", "Error", "Fallo");
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
